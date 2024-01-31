@@ -1,0 +1,33 @@
+plugins {
+    id 'scala'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.bernie'
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ["src/main/scala"]
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+dependencies {
+    implementation "org.scala-lang:scala-library:2.13.12"
+}
+
+tasks.register('submit', Exec) {
+    commandLine 'echo', 'hello, world!'
+}
+
+application {
+    mainClass = 'com.bernie.HelloWorld'
+}
