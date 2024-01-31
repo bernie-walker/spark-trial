@@ -1,4 +1,4 @@
-package com.bernie
+package com.berniewalker
 
 object HelloWorld {
   def main(args: Array[String]): Unit = {

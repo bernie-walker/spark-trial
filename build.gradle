@@ -7,12 +7,15 @@ repositories {
     mavenCentral()
 }
 
+def gitSha = 'git rev-parse --short HEAD'.execute().text.trim()
+
 group = 'com.bernie'
+version = "$majorVersion.$gitSha"
 
 sourceSets {
     main {
         scala {
-            srcDirs = ["src/main/scala"]
+            srcDirs = ['src/main/scala']
         }
         resources {
             srcDirs = ['src/main/resources']
@@ -21,7 +24,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation "org.scala-lang:scala-library:2.13.12"
+    implementation "org.scala-lang:scala-library:$scalaVersion"
 }
 
 tasks.register('submit', Exec) {
@@ -29,5 +32,5 @@ tasks.register('submit', Exec) {
 }
 
 application {
-    mainClass = 'com.bernie.HelloWorld'
+    mainClass = 'com.berniewalker.HelloWorld'
 }
