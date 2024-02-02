@@ -5,16 +5,14 @@ import org.apache.spark.sql.SparkSession
 object SimpleApp {
 
   def main(args: Array[String]): Unit = {
-    val fileName = args(0)
+    val spark = SparkSession.builder().appName("SimpleApplication").getOrCreate()
 
-    val spark = SparkSession.builder().appName("Simple Application").getOrCreate()
+    val numbersDf = spark.range(20).toDF("number")
 
-    val logData = spark.read.textFile(fileName).cache()
+    val evenNumbers = numbersDf.where((numbersDf("number") % 2).equalTo(0))
 
-    val numAs = logData.filter(line => line.contains("a")).count()
-    val numBs = logData.filter(line => line.contains("b")).count()
-
-    println(s"Lines with a: $numAs, Lines with b: $numBs")
+    evenNumbers.show()
   }
+
 
 }

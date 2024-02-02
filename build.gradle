@@ -33,10 +33,15 @@ shadowJar {
     archiveClassifier = ''
 }
 
-
+def sparkApps = ['SimpleApp']
 def jarPath = "${shadowJar.destinationDirectory.get()}/${shadowJar.archiveFileName.get()}"
-tasks.register('submitSparkJob', Exec) {
-    dependsOn 'shadowJar'
-    executable 'spark-submit'
-    args '--class', 'com.berniewalker.SimpleApp', jarPath, './build.gradle'
+
+sparkApps.each { app ->
+    def appClass = "com.berniewalker.$app"
+    tasks.register("sparkSubmit$app", Exec) {
+        description = "Submits the spark application $appClass"
+        dependsOn 'shadowJar'
+        executable 'spark-submit'
+        args '--class', appClass, jarPath
+    }
 }
