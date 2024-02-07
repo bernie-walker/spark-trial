@@ -33,7 +33,7 @@ shadowJar {
     archiveClassifier = ''
 }
 
-def sparkApps = ['SimpleApp']
+def sparkApps = ['SimpleApp', 'FlightDataApp']
 def jarPath = "${shadowJar.destinationDirectory.get()}/${shadowJar.archiveFileName.get()}"
 
 sparkApps.each { app ->
