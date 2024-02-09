@@ -1,25 +1,8 @@
 package com.berniewalker
 
 import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.desc
-import org.apache.spark.sql.{
-  Dataset,
-  RelationalGroupedDataset,
-  Row,
-  SparkSession
-}
-import org.apache.spark.sql.types.{
-  IntegerType,
-  StringType,
-  StructField,
-  StructType
-}
-
-//case class FlightDetail(
-//    destCountryName: String,
-//    originCountryName: String,
-//    count: Int
-//)
 
 object FlightDataApp {
   def main(args: Array[String]): Unit = {
@@ -48,12 +31,23 @@ object FlightDataApp {
       .sort(desc("count"))
       .limit(5)
 
-    topFiveDestinations.explain("extended")
-//    topFiveDestinations.explain("codegen")
-//    topFiveDestinations.explain("cost")
-//    topFiveDestinations.explain("formatted")
+    flightDetails.createTempView("flight_data")
+
+    val dfInSql = spark.sql(
+      """
+        |select DEST_COUNTRY_NAME, sum(count) as flight_count
+        |from flight_data
+        |group by DEST_COUNTRY_NAME
+        |order by flight_count desc
+        |limit 5
+        |""".stripMargin
+    )
+
+    topFiveDestinations.explain()
+    dfInSql.explain()
 
     topFiveDestinations.show()
+    dfInSql.show()
   }
 
 }
